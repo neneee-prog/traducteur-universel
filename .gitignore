@@ -1,0 +1,12 @@
+# Exclure les dossiers volumineux d’entraînement
+traducteur-audio/TTS/
+traducteur-audio/opus_datasets/
+traducteur-audio/results/
+traducteur-audio/fine-tuned-model/
+
+# Ignorer les environnements virtuels et fichiers temporaires
+*.pyc
+__pycache__/
+*.log
+*.tmp
+venv/

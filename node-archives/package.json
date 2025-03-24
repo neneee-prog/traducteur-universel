@@ -1,0 +1,22 @@
+{
+  "name": "traducteur-universel",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "docker:rebuild": "docker-compose down --volumes && docker-compose build --no-cache && docker-compose up --force-recreate"
+  },
+  "dependencies": {
+    "bcrypt": "5.1.0",
+    "vosk": "0.3.29",
+    "ffi-napi": "4.0.3",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0",
+    "body-parser": "^1.20.2",
+    "jsonwebtoken": "^9.0.2",
+    "express-validator": "^7.0.1",
+    "@xenova/transformers": "^2.16.1",
+    "axios": "^1.7.7",
+    "ws": "^8.16.0"
+  }
+}

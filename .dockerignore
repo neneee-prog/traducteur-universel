@@ -1,0 +1,8 @@
+**
+!requirements.txt
+!traducteur-audio/Dockerfile
+!traducteur-audio/app.py
+!traducteur-audio/models/**
+!public/**
+
+
