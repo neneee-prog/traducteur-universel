@@ -1,5 +1,5 @@
-**
-!cloudbuild.yaml
-!requirements.txt
-!public/**
-!traducteur-audio/**
+# Exclure uniquement les dossiers volumineux
+traducteur-audio/TTS/
+traducteur-audio/opus_datasets/
+traducteur-audio/results/
+traducteur-audio/fine-tuned-model/
