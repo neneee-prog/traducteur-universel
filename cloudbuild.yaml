@@ -1,7 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   dir: traducteur-audio
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/uotranslate', '-f', 'Dockerfile', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/traducteur-universel', '-f', 'Dockerfile', '.']
 images:
-- 'gcr.io/$PROJECT_ID/uotranslate'
+- 'gcr.io/$PROJECT_ID/traducteur-universel'
 
