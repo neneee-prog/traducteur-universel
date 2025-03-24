@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <!-- CHEMIN CSS CORRIGÉ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+</head>
+<body class="auth-page">
+    <!-- Vague de fond (préservée) -->
+    <div class="wave-container">
+        <svg class="wave" viewBox="0 0 1440 320">
+            <path fill="#8ecae6" d="M0,128L48,128C96,128,192,128,288,160C384,192,480,224,576,213.3C672,203,768,149,864,144C960,139,1056,181,1152,192C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </div>
+
+    <!-- Formulaire d'inscription -->
+    <div class="auth-container">
+        <div class="auth-box">
+            <!-- Logo corrigé pour Flask -->
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Université d'Ottawa" 
+                 class="auth-logo">
+            <h2>Inscription</h2>
+            
+            <!-- Formulaire modifié pour Flask -->
+            <form class="auth-form" method="POST" action="{{ url_for('register') }}">
+                <div class="input-group">
+                    <input type="text" id="name" name="name" required>
+                    <label for="name">Nom complet</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email uOttawa</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" required>
+                    <label for="password">Mot de passe</label>
+                </div>
+                <button type="submit" class="auth-btn">Créer un compte</button>
+                <div class="auth-footer">
+                    <!-- Lien corrigé pour Flask -->
+                    <a href="{{ url_for('login') }}">Déjà inscrit ? Connectez-vous</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer conforme au CSS -->
+    <footer>
+        <div class="footer-content">
+            <!-- Logo corrigé -->
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Université d'Ottawa" 
+                 class="footer-logo">
+            <p>© 2025 Université d'Ottawa</p>
+            <p class="group-name">C1-2 IA de Traduction Universelle</p>
+        </div>
+    </footer>
+
+    <!-- Script corrigé pour Flask -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

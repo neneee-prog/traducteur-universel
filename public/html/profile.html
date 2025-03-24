@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Université d'Ottawa" 
+                 class="uottawa-logo">
+        </div>
+        <button id="back-btn" data-url="{{ url_for('app_page') | safe }}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <script>
+            document.getElementById('back-btn').addEventListener('click', function() {
+                var url = this.getAttribute('data-url');
+                window.location.href = url;
+            });
+        </script>
+        
+
+    <div class="container">
+        <div class="card">
+            <h2>Mon Compte</h2>
+            
+            <div class="input-group">
+                <input type="text" id="name" placeholder="Nom" value="Étudiant" required>
+                <label for="name">Nom complet</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" value="etudiant@uottawa.ca" required>
+                <label for="email">Email uOttawa</label>
+            </div>
+            
+            <button class="btn btn-primary">Sauvegarder</button>
+            <button class="btn btn-secondary">Changer mot de passe</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Logo" 
+                 class="footer-logo">
+            <p>© 2025 Université d'Ottawa</p>
+            <p class="group-name">C1-2 IA de Traduction Universelle</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

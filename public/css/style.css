@@ -1,0 +1,798 @@
+:root {
+    --prussian-blue: #023047ff;
+    --ut-orange: #fb8500ff;
+    --selective-yellow: #ffb703ff;
+    --sky-blue: #8ecae6ff;
+    --carmine: #8F001Aff;
+    
+    --glass-bg: rgba(255, 255, 255, 0.9);
+    --glass-fg: rgba(0, 0, 0, 0.8);
+    --radius: 12px;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --font-family: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background: #ffffff;
+    color: var(--glass-fg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Formulaire de connexion/inscription */
+.auth-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-logo {
+    width: 100px;
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--glass-fg);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group input:not(:placeholder-shown) {
+    border-color: var(--selective-yellow);
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 0.7rem;
+    color: var(--selective-yellow);
+}
+
+.btn-primary {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background: var(--ut-orange);
+    transform: scale(1.05);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--selective-yellow);
+}
+
+/* Page d'erreur 404 */
+.error-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-code {
+    font-size: 8rem;
+    color: var(--selective-yellow);
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.error-message {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.error-button {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.error-button:hover {
+    background: var(--ut-orange);
+    transform: scale(1.05);
+}
+
+/* Sidebar commune */
+.sidebar {
+    width: 250px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s ease; /* Ajouté pour le mode focus */
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem;
+}
+
+.sidebar-logo {
+    width: 100px;
+}
+
+.profile-button {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 16px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-button:hover {
+    transform: scale(1.1);
+}
+
+.sidebar-bar {
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-bar span {
+    color: var(--ut-orange);
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.sidebar-bar i {
+    color: var(--ut-orange);
+}
+
+.sidebar-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--selective-yellow);
+    z-index: -1;
+    transition: left 0.3s ease;
+}
+
+.sidebar-bar:hover::before {
+    left: 0;
+}
+
+.sidebar-bar:hover span,
+.sidebar-bar:hover i {
+    color: white;
+}
+
+.search-group input {
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    padding: 0 1rem;
+    color: var(--ut-orange);
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.search-group input::placeholder {
+    color: var(--ut-orange);
+}
+
+.search-group input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--selective-yellow);
+    box-shadow: 0 0 10px rgba(251, 133, 0, 0.2);
+}
+
+.course-container {
+    margin-top: auto;
+}
+
+.course-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    border-radius: var(--radius);
+    transition: all 0.3s;
+}
+
+.course-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(5px);
+}
+
+.course-item i {
+    color: var(--ut-orange);
+}
+
+/* Fenêtre de transcription légèrement décalée vers la droite */
+.transcription-window {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 80%;
+    max-width: 800px;
+    height: 60vh;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    animation: floatIn 0.8s ease-out;
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease; /* Pour les modes */
+}
+
+.transcription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.language-tags {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 4px 8px;
+    border-radius: var(--radius);
+}
+
+/* Boutons fonctionnels en bas */
+.functional-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.functional-buttons button {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--glass-fg);
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.functional-buttons button:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .auth-box {
+        padding: 1.5rem;
+    }
+
+    .input-group input {
+        font-size: 0.9rem;
+    }
+
+    .error-code {
+        font-size: 6rem;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .transcription-window {
+        width: 90%;
+        max-width: none;
+        height: auto;
+        left: 50%;
+    }
+}
+
+/* Footer centré */
+footer {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--glass-fg);
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* MODES CORRIGÉS */
+.night-mode {
+    --glass-bg: rgba(30, 30, 30, 0.9);
+    --glass-fg: #ffffff;
+    --ut-orange: #fb8500cc;
+    --selective-yellow: #ffb703cc;
+}
+
+.daltonian-mode {
+    --ut-orange: #00FF00;
+    --selective-yellow: #00FFFF;
+    --glass-fg: #000000;
+}
+
+.focus-mode .sidebar {
+    transform: translateX(-100%);
+}
+
+.focus-mode .app-container {
+    width: 95% !important;
+    left: 50% !important;
+}
+/* Styles spécifiques à profile.html */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.uottawa-logo {
+    height: 40px;
+}
+
+.back-btn {
+    background: var(--selective-yellow);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    transform: scale(1.05);
+    background: var(--ut-orange);
+}
+
+.container {
+    margin-top: 80px; /* Evite le chevauchement avec le header fixe */
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.input-group {
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--glass-fg);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group input:not(:placeholder-shown) {
+    border-color: var(--selective-yellow);
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 0.7rem;
+    color: var(--selective-yellow);
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin: 0.5rem 0;
+}
+
+.btn-primary {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: var(--ut-orange);
+    transform: scale(1.02);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--selective-yellow);
+    color: var(--selective-yellow);
+}
+
+.btn-secondary:hover {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+}
+
+footer {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-logo {
+    height: 30px;
+}
+
+.group-name {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 576px) {
+    .card {
+        padding: 1.5rem;
+    }
+    
+    .uottawa-logo {
+        height: 30px;
+    }
+    
+    header {
+        padding: 1rem;
+    }
+}
+/* Styles spécifiques à register.html */
+.auth-page {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.auth-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 10.5%),
+        radial-gradient(circle, rgba(255,255,255,0.15) 10%, transparent 10.5%);
+    background-size: 40px 40px;
+    animation: moveBackground 5s linear infinite;
+    z-index: 1;
+}
+
+.auth-container {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-box {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    padding: 2.5rem 3rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    animation: floatIn 0.8s ease-out;
+}
+
+.auth-logo {
+    width: 150px;
+    margin-bottom: 2.5rem; /* Modifié de 2rem à 2.5rem */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+}
+
+.input-group {
+    position: relative;
+    margin: 1.5rem 0;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--glass-fg);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group input:not(:placeholder-shown) {
+    border-color: var(--carmine);
+    padding-left: 20px;
+    box-shadow: 0 0 0 2px rgba(143, 0, 26, 0.3);
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 0.75rem;
+    color: var(--carmine);
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0 4px;
+}
+
+/* Bouton principal (Créer un compte) */
+.auth-btn {
+    background: var(--carmine);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-top: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.auth-btn:hover {
+    background: #ff6b6b;
+    transform: scale(1.02);
+}
+
+/* Lien de connexion */
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.auth-footer a {
+    color: var(--carmine);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    display: inline-block;
+}
+
+.auth-footer a:hover {
+    background: rgba(143, 0, 26, 0.1);
+    text-decoration: none;
+    transform: translateX(5px);
+}
+
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveBackground {
+    0% { background-position: 0 0; }
+    100% { background-position: -80px -80px; }
+}
+
+@media (max-width: 576px) {
+    .auth-box {
+        padding: 1.5rem;
+    }
+    
+    .auth-logo {
+        width: 120px;
+    }
+    
+    .input-group input {
+        padding: 12px;
+    }
+}
+
+/* Suppression des vagues */
+.wave-container {
+    display: none;
+}

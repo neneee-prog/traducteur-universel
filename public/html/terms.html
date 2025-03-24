@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions d'Utilisation</title>
+    <!-- CHEMIN CSS CORRIGÉ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header conforme au CSS -->
+    <header>
+        <div class="logo">
+            <!-- CHEMIN IMAGE CORRIGÉ -->
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Université d'Ottawa" 
+                 class="uottawa-logo">
+        </div>
+    </header>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+        <div class="card">
+            <h1>Conditions d'Utilisation</h1>
+            <p>Mise à jour : 2025-01-15</p>
+            <div class="terms-content">
+                <h2>1. Acceptation des termes</h2>
+                <p>En utilisant ce service, vous acceptez ces conditions.</p>
+                
+                <h2>2. Utilisation éducative</h2>
+                <p>Destiné exclusivement aux étudiants de l'Université d'Ottawa.</p>
+                
+                <h2>3. Limitations</h2>
+                <p>Service disponible uniquement pendant les heures académiques.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer modernisé avec vos styles -->
+    <footer>
+        <div class="footer-content">
+            <!-- Logo corrigé -->
+            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
+                 alt="Université d'Ottawa" 
+                 class="footer-logo">
+            <p>© 2025 Université d'Ottawa</p>
+            <p class="group-name">C1-2 IA de Traduction Universelle</p>
+        </div>
+    </footer>
+
+    <!-- Script corrigé pour Flask -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
