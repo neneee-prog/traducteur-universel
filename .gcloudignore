@@ -1,7 +1,15 @@
-traducteur-audio/opus_datasets/
-traducteur-audio/results/
-traducteur-audio/fine-tuned-model/
-traducteur-audio/venv/
-traducteur-audio/.venv/
-venv/
-.venv/
+# Ignore tout par défaut
+**
+
+# Inclure uniquement les fichiers nécessaires au build Docker
+!cloudbuild.yaml
+!requirements.txt
+
+# Frontend (interface web)
+!public/
+!public/**
+
+# Backend & Dockerfile
+!traducteur-audio/Dockerfile
+!traducteur-audio/app.py
+!traducteur-audio/models/**
