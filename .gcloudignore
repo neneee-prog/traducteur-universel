@@ -1,0 +1,14 @@
+# Ignore tout par défaut
+**
+
+# Mais inclure le cloudbuild config
+!cloudbuild.yaml
+
+# Inclure requirements.txt (Dockerfile COPY depuis root)
+!requirements.txt
+
+# Inclure votre dossier public
+!public/**
+
+# Inclure tout dans traducteur-audio (Dockerfile + code)
+!traducteur-audio/**
