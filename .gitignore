@@ -10,3 +10,8 @@ __pycache__/
 *.log
 *.tmp
 venv/
+# Ignorer le Dockerfile dans traducteur-audio (celui que vous ne voulez pas suivre)
+traducteur-audio/Dockerfile
+
+# Ignorer le dossier de clone bare (s'il existe)
+traducteur-universel.git/
