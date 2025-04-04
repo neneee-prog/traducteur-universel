@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cours - Traduction Universelle</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Sidebar Gauche -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <button class="back-btn" onclick="window.location.href='app.html'">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" class="sidebar-logo">
+      <div class="search-group">
+        <input type="text" placeholder="Rechercher un cours" id="courseSearch">
+      </div>
+    </div>
+    <div class="course-container">
+      <div id="courses"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar Droite -->
+  <div class="right-sidebar">
+    <div class="sidebar-header">
+      <h3>AJOUTER UN FICHIER</h3>
+      <div class="sidebar-bar upload-box" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-file-upload"></i>
+        <span>Parcourir les fichiers</span>
+        <input type="file" id="fileInput" multiple hidden>
+      </div>
+    </div>
+    <div class="translation-files" id="translationFiles"></div>
+  </div>
+
+  <!-- Contenu Principal -->
+  <div class="app-container">
+    <div class="transcription-window">
+      <div class="transcription-header">
+        <h3>Traduction en temps réel</h3>
+        <div class="language-tags">EN → FR</div>
+      </div>
+      <div id="transcriptionOutput" class="transcription-content">
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons Fonctionnels -->
+  <div class="functional-buttons">
+    <button id="nightMode" title="Mode Nuit">
+      <i class="fas fa-moon fa-2x"></i>
+    </button>
+    <button id="focusMode" title="Mode Focus">
+      <i class="fas fa-crosshairs fa-2x"></i>
+    </button>
+    <button id="fontSizeUp" title="Agrandir police">
+      <i class="fas fa-plus fa-2x"></i>
+    </button>
+    <button id="fontSizeDown" title="Réduire police">
+      <i class="fas fa-minus fa-2x"></i>
+    </button>
+    <button id="daltonianMode" title="Mode Daltonien">
+      <i class="fas fa-adjust fa-2x"></i>
+    </button>
+    <button id="startStopBtn" title="Enregistrer">
+      <i class="fas fa-microphone fa-2x"></i>
+    </button>
+    <button id="saveBtn" title="Sauvegarder">
+      <i class="fas fa-save fa-2x"></i>
+    </button>
+
+    <!-- NOUVEAU: Bouton pour arrêter le TTS -->
+    <button id="stopTTSBtn" title="Arrêter TTS">
+      <i class="fas fa-volume-mute fa-2x"></i>
+    </button>
+  </div>
+
+  <!-- Menu Contextuel -->
+  <div class="course-context-menu" id="courseMenu">
+    <div onclick="renameCourse()"><i class="fas fa-pencil-alt"></i> Renommer</div>
+    <div onclick="deleteCourse()"><i class="fas fa-trash"></i> Supprimer</div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" class="footer-logo">
+      <p class="group-name">© 2025 C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
+
+  <!-- Ton script principal -->
+  <script src="{{ url_for('static', path='js/script.js') }}"></script>
+</body>
+</html>
+
+

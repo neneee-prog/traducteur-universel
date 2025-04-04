@@ -1,62 +1,69 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <!-- CHEMIN CSS CORRIGÉ -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
 </head>
 <body class="auth-page">
-    <!-- Vague de fond (préservée) -->
-    <div class="wave-container">
-        <svg class="wave" viewBox="0 0 1440 320">
-            <path fill="#8ecae6" d="M0,128L48,128C96,128,192,128,288,160C384,192,480,224,576,213.3C672,203,768,149,864,144C960,139,1056,181,1152,192C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-        </svg>
-    </div>
-
-    <!-- Conteneur d'authentification -->
-    <div class="auth-container">
-        <div class="auth-box">
-            <!-- Logo corrigé pour Flask -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="auth-logo">
-            <h2>Connexion</h2>
-            
-            <!-- Formulaire modifié pour Flask -->
-            <form class="auth-form" method="POST" action="{{ url_for('login') }}">
-                <div class="input-group">
-                    <input type="email" id="email" name="email" required>
-                    <label for="email">Email</label>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" name="password" required>
-                    <label for="password">Mot de passe</label>
-                </div>
-                <button type="submit" class="auth-btn">Se connecter</button>
-                <div class="auth-footer">
-                    <!-- Lien vers inscription (Flask route) -->
-                    <a href="{{ url_for('register') }}">Créer un compte</a>
-                </div>
-            </form>
+  <div class="wave-container">
+    <svg class="wave" viewBox="0 0 1440 320">
+      <path fill="#8ecae6" d="M0,128L48,128C96,128,192,128,288,160C384,192,480,224,576,213.3C672,203,768,149,864,144C960,139,1056,181,1152,192C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
+  </div>
+  <div class="auth-container">
+    <div class="auth-box">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="auth-logo">
+      <h2>Connexion</h2>
+      <form id="loginForm" class="auth-form">
+        <div class="input-group">
+          <input type="email" id="email" name="email" required>
+          <label for="email">Email uOttawa</label>
         </div>
-    </div>
-
-    <!-- Footer modernisé -->
-    <footer>
-        <div class="footer-content">
-            <!-- Logo corrigé pour Flask -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="footer-logo">
-            <p>© 2025 Université d'Ottawa</p>
-            <p class="group-name">C1-2 IA de Traduction Universelle</p>
+        <div class="input-group">
+          <input type="password" id="password" name="password" required>
+          <label for="password">Mot de passe</label>
         </div>
-    </footer>
-
-    <!-- Script modifié pour Flask -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <button type="button" id="loginBtn" class="auth-btn">Se connecter</button>
+        <div class="auth-footer">
+          <a href="{{ url_for('register_page') }}">Pas encore inscrit ? Créez un compte</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="footer-logo">
+      <p>© 2025 Université d'Ottawa</p>
+      <p class="group-name">C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email, password})
+        });
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          // Redirection vers app.html
+          window.location.href = "{{ url_for('app_page') }}";
+        } else {
+          const errorData = await response.json();
+          alert("Erreur: " + errorData.detail);
+        }
+      } catch (error) {
+        console.error('Erreur de connexion:', error);
+      }
+    });
+  </script>
+  <script src="{{ url_for('static', path='js/script.js') }}"></script>
 </body>
 </html>

@@ -1,51 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Politique de Confidentialité</title>
-    <!-- CHEMIN CSS CORRIGÉ -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de Confidentialité</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 </head>
 <body>
-    <!-- Header conforme au CSS -->
-    <header>
-        <div class="logo">
-            <!-- CHEMIN IMAGE CORRIGÉ -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="uottawa-logo">
-        </div>
-    </header>
-
-    <!-- Conteneur principal -->
-    <div class="container">
-        <div class="card">
-            <h1>Politique de Confidentialité</h1>
-            <p>Version 1.0 - Dernière mise à jour : 2025-01-15</p>
-            <div class="policy-content">
-                <h2>Collecte des données</h2>
-                <p>Aucune donnée personnelle n'est collectée sans consentement.</p>
-                
-                <h2>Utilisation des données</h2>
-                <p>Les données sont utilisées uniquement pour améliorer le service de traduction.</p>
-                
-                <h2>Sécurité</h2>
-                <p>Les informations sont stockées de manière sécurisée.</p>
-            </div>
-        </div>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="uottawa-logo">
     </div>
+  </header>
 
-    <!-- Footer modernisé avec vos styles -->
-    <footer>
-        <div class="footer-content">
-            <!-- Logo conforme au CSS -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="footer-logo">
-            <p>© 2025 Université d'Ottawa</p>
-            <p class="group-name">C1-2 IA de Traduction Universelle</p>
-        </div>
-    </footer>
+  <div class="container">
+    <div class="card">
+      <h1>Politique de Confidentialité</h1>
+      <p>Version 1.0 - Dernière mise à jour : 2025-01-15</p>
+      <div class="policy-content">
+        <h2>Collecte des données</h2>
+        <p>Aucune donnée personnelle n'est collectée sans consentement.</p>
+        <h2>Utilisation des données</h2>
+        <p>Les données sont utilisées uniquement pour améliorer le service de traduction.</p>
+        <h2>Sécurité</h2>
+        <p>Les informations sont stockées de manière sécurisée.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="footer-logo">
+      <p>© 2025 Université d'Ottawa</p>
+      <p class="group-name">C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
 </body>
 </html>

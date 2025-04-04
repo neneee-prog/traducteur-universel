@@ -1,55 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conditions d'Utilisation</title>
-    <!-- CHEMIN CSS CORRIGÉ -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions d'Utilisation</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Header conforme au CSS -->
-    <header>
-        <div class="logo">
-            <!-- CHEMIN IMAGE CORRIGÉ -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="uottawa-logo">
-        </div>
-    </header>
-
-    <!-- Conteneur principal -->
-    <div class="container">
-        <div class="card">
-            <h1>Conditions d'Utilisation</h1>
-            <p>Mise à jour : 2025-01-15</p>
-            <div class="terms-content">
-                <h2>1. Acceptation des termes</h2>
-                <p>En utilisant ce service, vous acceptez ces conditions.</p>
-                
-                <h2>2. Utilisation éducative</h2>
-                <p>Destiné exclusivement aux étudiants de l'Université d'Ottawa.</p>
-                
-                <h2>3. Limitations</h2>
-                <p>Service disponible uniquement pendant les heures académiques.</p>
-            </div>
-        </div>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="uottawa-logo">
     </div>
-
-    <!-- Footer modernisé avec vos styles -->
-    <footer>
-        <div class="footer-content">
-            <!-- Logo corrigé -->
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="footer-logo">
-            <p>© 2025 Université d'Ottawa</p>
-            <p class="group-name">C1-2 IA de Traduction Universelle</p>
-        </div>
-    </footer>
-
-    <!-- Script corrigé pour Flask -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </header>
+  <div class="container">
+    <div class="card">
+      <h1>Conditions d'Utilisation</h1>
+      <p>Mise à jour : 2025-01-15</p>
+      <div class="terms-content">
+        <h2>1. Acceptation des termes</h2>
+        <p>En utilisant ce service, vous acceptez l'ensemble des conditions d'utilisation décrites dans ce document.</p>
+        <h2>2. Utilisation éducative</h2>
+        <p>Ce service est destiné exclusivement aux étudiants de l'Université d'Ottawa pour faciliter l'apprentissage et la traduction.</p>
+        <h2>3. Limitations</h2>
+        <p>Le service est disponible uniquement pendant les heures académiques. UoTranslate se réserve le droit de modifier ou d'interrompre le service sans préavis.</p>
+        <h2>4. Propriété intellectuelle</h2>
+        <p>Tous les éléments (textes, images, logos, design, code source, etc.) sont protégés par des droits de propriété intellectuelle. Toute reproduction non autorisée est interdite.</p>
+        <h2>5. Collecte et utilisation des données</h2>
+        <p>Les données collectées (informations de connexion, traductions, etc.) sont utilisées pour améliorer le service et sont stockées de manière sécurisée via Google Cloud Run. Elles sont traitées conformément aux législations applicables au Québec et en Ontario.</p>
+        <h2>6. Sécurité et confidentialité</h2>
+        <p>Des mesures de sécurité avancées protègent vos données. Vous êtes responsable de la sécurisation de vos identifiants.</p>
+        <h2>7. Loi applicable et juridiction</h2>
+        <p>Ces conditions sont régies par les lois des provinces du Québec et de l'Ontario. Tout litige sera soumis aux tribunaux compétents de ces provinces.</p>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="footer-logo">
+      <p>© 2025 Université d'Ottawa</p>
+      <p class="group-name">C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', path='js/script.js') }}"></script>
 </body>
 </html>
+

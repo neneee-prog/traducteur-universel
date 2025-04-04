@@ -1,14 +1,17 @@
+# cloudbuild.yaml
+
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-    - build
-    - -f
-    - ./traducteur-audio/Dockerfile
-    - -t
-    - gcr.io/$PROJECT_ID/traducteur-universel
-    - .
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build
+    args: [
+      'build',
+      '-t', 'gcr.io/silken-setting-454700-b7/uotranslate:v1',
+      '.'
+    ]
+
+# Utiliser une machine plus performante pour accélérer le build
+options:
+  machineType: N1_HIGHCPU_8
+
 images:
-- gcr.io/$PROJECT_ID/traducteur-universel
-
-
-
+  - 'gcr.io/silken-setting-454700-b7/uotranslate:v1'

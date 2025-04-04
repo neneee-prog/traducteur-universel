@@ -1,10 +1,10 @@
+
 :root {
     --prussian-blue: #023047ff;
     --ut-orange: #fb8500ff;
     --selective-yellow: #ffb703ff;
     --sky-blue: #8ecae6ff;
     --carmine: #8F001Aff;
-    
     --glass-bg: rgba(255, 255, 255, 0.9);
     --glass-fg: rgba(0, 0, 0, 0.8);
     --radius: 12px;
@@ -191,7 +191,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    transition: transform 0.3s ease; /* Ajouté pour le mode focus */
+    transition: transform 0.3s ease;
 }
 
 .sidebar-header {
@@ -321,25 +321,15 @@ body {
     color: var(--ut-orange);
 }
 
-/* Fenêtre de transcription légèrement décalée vers la droite */
+/* Fenêtre de transcription */
 .transcription-window {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: var(--radius);
-    padding: 2rem;
     width: 80%;
     max-width: 800px;
-    height: 60vh;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    animation: floatIn 0.8s ease-out;
-    position: absolute;
-    top: 50%;
-    left: 55%;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease; /* Pour les modes */
+    height: auto;
+    margin: 2rem auto;
+    transition: all 0.3s ease;
 }
 
 .transcription-header {
@@ -391,26 +381,26 @@ body {
     .auth-box {
         padding: 1.5rem;
     }
-
+    
     .input-group input {
         font-size: 0.9rem;
     }
-
+    
     .error-code {
         font-size: 6rem;
     }
-
+    
     .error-message {
         font-size: 1.2rem;
     }
-
+    
     .sidebar {
         width: 100%;
         position: static;
         border-right: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
-
+    
     .transcription-window {
         width: 90%;
         max-width: none;
@@ -434,13 +424,6 @@ footer p {
     font-size: 0.9rem;
 }
 
-/* MODES CORRIGÉS */
-.night-mode {
-    --glass-bg: rgba(30, 30, 30, 0.9);
-    --glass-fg: #ffffff;
-    --ut-orange: #fb8500cc;
-    --selective-yellow: #ffb703cc;
-}
 
 .daltonian-mode {
     --ut-orange: #00FF00;
@@ -456,6 +439,7 @@ footer p {
     width: 95% !important;
     left: 50% !important;
 }
+
 /* Styles spécifiques à profile.html */
 header {
     position: fixed;
@@ -497,7 +481,7 @@ header {
 }
 
 .container {
-    margin-top: 80px; /* Evite le chevauchement avec le header fixe */
+    margin-top: 80px;
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -623,6 +607,7 @@ footer {
         padding: 1rem;
     }
 }
+
 /* Styles spécifiques à register.html */
 .auth-page {
     background: linear-gradient(135deg, #a8edea, #fed6e3);
@@ -670,7 +655,7 @@ footer {
 
 .auth-logo {
     width: 150px;
-    margin-bottom: 2.5rem; /* Modifié de 2rem à 2.5rem */
+    margin-bottom: 2.5rem;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -796,3 +781,633 @@ footer {
 .wave-container {
     display: none;
 }
+
+#downloadBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+#downloadBtn:hover {
+    background-color: #45a049;
+}
+
+#downloadBtn.clicked {
+    animation: pulse 0.4s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+.right-sidebar {
+    width: 250px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    height: calc(100vh - 60px);
+    position: fixed;
+    right: 0;
+    top: 60px;
+    transition: transform 0.3s ease;
+}
+
+.upload-box {
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.upload-box span {
+    color: var(--ut-orange);
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.upload-box i {
+    color: var(--ut-orange);
+}
+
+.upload-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--selective-yellow);
+    z-index: -1;
+    transition: left 0.3s ease;
+}
+
+.upload-box:hover::before {
+    left: 0;
+}
+
+.upload-box:hover span,
+.upload-box:hover i {
+    color: white;
+}
+.right-sidebar .sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.upload-box {
+    width: 100%;
+    max-width: 200px;
+    margin: 1rem auto 0;
+}
+
+.upload-box span {
+    color: var(--ut-orange) !important;
+}
+
+.upload-box i {
+    color: var(--ut-orange) !important;
+}
+/* Styles spécifiques à course.html */
+.course-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.course-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.course-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ut-orange);
+}
+
+.course-content {
+    margin-top: 80px;
+    padding: 2rem;
+    flex: 1;
+}
+
+.translation-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.translation-item:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.translation-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.translation-actions i {
+    cursor: pointer;
+    color: var(--ut-orange);
+    transition: color 0.3s;
+}
+
+.translation-actions i:hover {
+    color: var(--selective-yellow);
+}
+
+/* Menu contextuel des cours */
+.course-context-menu {
+    background: var(--glass-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 0.5rem;
+    min-width: 150px;
+}
+
+.course-context-menu div {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.course-context-menu div:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .course-header {
+        padding: 1rem;
+    }
+    
+    .course-title {
+        font-size: 1rem;
+    }
+    
+    .course-content {
+        padding: 1rem;
+    }
+}
+
+.course-context-menu {
+    position: absolute;
+    background: #2d2d2d;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: none;
+}
+
+.course-context-menu div {
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.course-context-menu div:hover {
+    background: #444;
+}
+
+.menu-divider {
+    height: 1px;
+    background: #666;
+    margin: 8px 0;
+}
+
+.course-context-menu i {
+    margin-right: 8px;
+}
+/* Animations globales */
+.animated {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-text {
+    animation: textReveal 1.5s cubic-bezier(0.17, 0.55, 0.55, 1);
+}
+
+@keyframes textReveal {
+    0% { opacity: 0; transform: translateX(-100%); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.float-in {
+    animation: floatIn 1.2s ease-in-out;
+}
+
+@keyframes floatIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Structure principale */
+.container-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+}
+
+/* Sidebars */
+.sidebar {
+    width: 250px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    height: calc(100vh - 60px);
+    position: fixed;
+    left: 0;
+    top: 60px;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.right-sidebar {
+    width: 250px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    height: calc(100vh - 60px);
+    position: fixed;
+    right: 0;
+    top: 60px;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem;
+}
+
+.sidebar-bar {
+    width: 80%;
+    max-width: 200px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--selective-yellow);
+    z-index: -1;
+    transition: left 0.3s ease;
+}
+
+.sidebar-bar:hover::before {
+    left: 0;
+}
+
+.sidebar-bar:hover span,
+.sidebar-bar:hover i {
+    color: white;
+}
+
+.upload-box {
+    width: 80%;
+    max-width: 200px;
+    margin: 1rem auto;
+}
+
+.upload-box span {
+    color: var(--ut-orange);
+    font-weight: 600;
+}
+
+.upload-box i {
+    color: var(--ut-orange);
+}
+
+/* Contenu central */
+.app-container {
+    margin: 60px 250px 0 250px;
+    flex: 1;
+    padding: 2rem;
+    transition: margin 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.transcription-window {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    padding: 2rem;
+    height: 60vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.transcription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.language-tags {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 4px 8px;
+    border-radius: var(--radius);
+}
+
+/* Boutons fonctionnels */
+.functional-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+}
+
+.functional-buttons button {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--glass-fg);
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.functional-buttons button:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.05);
+}
+
+/* Menu contextuel */
+.course-context-menu {
+    position: absolute;
+    background: #2d2d2d;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1002;
+    display: none;
+    min-width: 200px;
+    animation: menuPop 0.3s ease-out;
+}
+
+@keyframes menuPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.course-context-menu div {
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.course-context-menu div:hover {
+    background: #444;
+}
+
+.menu-divider {
+    height: 1px;
+    background: #666;
+    margin: 8px 0;
+}
+
+/* Modes spéciaux */
+.night-mode {
+    --glass-bg: rgba(30,30,30,0.9);
+    --glass-fg: #ffffff;
+    --ut-orange: #fb8500cc;
+    --selective-yellow: #ffb703cc;
+}
+
+.daltonian-mode {
+    --ut-orange: #00FF00;
+    --selective-yellow: #00FFFF;
+    --glass-fg: #000000;
+}
+
+/* Amélioration du mode concentration */
+.focus-mode {
+    --glass-bg: rgba(255, 255, 255, 0.95);
+}
+
+.focus-mode .sidebar,
+.focus-mode .right-sidebar {
+    display: none !important; /* Disparition complète */
+}
+
+.focus-mode .transcription-window {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 800px !important;
+    height: 80vh !important;
+    margin: 0 !important;
+    z-index: 1002;
+}
+
+.focus-mode .functional-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+    gap: 2rem;
+}
+
+.focus-mode .transcription-content {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Responsive pour mode concentration */
+@media (max-width: 768px) {
+    .focus-mode .transcription-window {
+        width: 100% !important;
+        margin: 60px 0 80px !important;
+        padding: 1rem;
+    }
+    
+    .focus-mode .functional-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        bottom: 10px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .sidebar, .right-sidebar {
+        width: 200px;
+    }
+    
+    .app-container {
+        margin: 60px 200px 0 200px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar, .right-sidebar {
+        position: static;
+        width: 100%;
+        border: none;
+        order: 1;
+    }
+    
+    .app-container {
+        margin: 0 !important;
+        order: 2;
+        padding: 1rem;
+    }
+    
+    .functional-buttons {
+        position: static;
+        margin: 1rem 0;
+    }
+}
+
+/* Ajoutez ces améliorations à votre CSS existant */
+.transcription-window {
+    max-width: 1200px; /* Limite largeur maximale */
+    margin: 0 auto; /* Centrage horizontal */
+}
+
+.course-item {
+    flex-wrap: wrap; /* Adaptation mobile */
+}
+
+.translation-item {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .right-sidebar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .transcription-window {
+        padding: 1rem;
+    }
+    
+    .functional-buttons {
+        gap: 1rem;
+    }
+}
+/* Liens de cours dans la sidebar, style bouton */
+.course-item-link {
+    text-decoration: none;
+    display: block;
+    margin: 0.5rem 0;
+  }
+  
+  .course-item {
+    background: var(--selective-yellow);
+    color: var(--prussian-blue);
+    padding: 12px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  
+  .course-item:hover {
+    background: var(--ut-orange);
+    transform: scale(1.05);
+  }
+
+    
+  

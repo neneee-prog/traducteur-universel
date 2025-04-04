@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erreur 404 - Page Introuvable</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erreur 404 - Page Introuvable</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="error-container">
-        <h1 class="error-code">404</h1>
-        <p class="error-message">Oups ! La page que vous recherchez n'existe pas.</p>
-        <button class="error-button" onclick="window.location.href='index.html'">
-            Retour à l'accueil
-        </button>
-    </div>
+  <div class="error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">Oups ! La page que vous recherchez n'existe pas.</p>
+    <button id="back-btn" data-url="{{ url_for('login_page') }}" class="error-button">
+      Retour à l'accueil
+    </button>
+  </div>
 
-    <footer>
-        <p>© 2025 C1-2 IA de Traduction Universelle</p>
-    </footer>
+  <footer>
+    <p>© 2025 C1-2 IA de Traduction Universelle</p>
+  </footer>
+
+  <script>
+    document.getElementById('back-btn').addEventListener('click', function() {
+      window.location.href = this.dataset.url;
+    });
+  </script>
+  <script src="{{ url_for('static', path='js/script.js') }}"></script>
 </body>
 </html>

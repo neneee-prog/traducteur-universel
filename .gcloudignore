@@ -1,15 +1,47 @@
-# Ignore tout par défaut
-**
+# Tout ignorer par défaut
+*
 
-# Inclure uniquement les fichiers nécessaires au build Docker
-!cloudbuild.yaml
+# Réinclure les fichiers essentiels à la racine
+!Dockerfile
 !requirements.txt
+!.env
+!firebase-credentials.json
+!cloudbuild.yaml
 
-# Frontend (interface web)
-!public/
+# Réinclure le front-end
 !public/**
 
-# Backend & Dockerfile
-!traducteur-audio/Dockerfile
-!traducteur-audio/app.py
-!traducteur-audio/models/**
+# Réinclure entièrement le dossier traducteur-audio
+!traducteur-audio/**
+
+# Exclure explicitement les dossiers volumineux à la racine
+venv/
+audio_samples/
+src/
+traducteur-universel.git/
+
+# Dans traducteur-audio, exclure les dossiers non indispensables ou volumineux
+traducteur-audio/venv/
+traducteur-audio/.venv/
+traducteur-audio/TTS/
+traducteur-audio/argos-translate/
+traducteur-audio/ffmpeg/
+traducteur-audio/opus_datasets/
+traducteur-audio/results/
+traducteur-audio/fine-tuned-model/
+traducteur-audio/wav2vec2_model/
+traducteur-audio/models/opus-mt-en-fr/
+traducteur-audio/models/vosk-model-small-fr-0.22/
+traducteur-audio/models/argos-translate/
+
+# Exclure caches, logs et dossiers d'IDE
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.vscode/
+.idea/
+.DS_Store
+tests/
+
+

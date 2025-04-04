@@ -1,17 +1,34 @@
-# Exclure les dossiers volumineux d’entraînement
+# Exclure les fichiers de configuration sensibles
+.env
+firebase-credentials.json
+
+# Exclure les environnements virtuels à la racine
+venv/
+.venv/
+
+# Exclure les répertoires volumineux à la racine
+audio_samples/
+src/
+traducteur-universel.git/
+
+# Dans le dossier traducteur-audio, exclure les répertoires non indispensables ou volumineux
+traducteur-audio/venv/
+traducteur-audio/.venv/
 traducteur-audio/TTS/
+traducteur-audio/argos-translate/
+traducteur-audio/ffmpeg/
 traducteur-audio/opus_datasets/
 traducteur-audio/results/
 traducteur-audio/fine-tuned-model/
+traducteur-audio/wav2vec2_model/
 
-# Ignorer les environnements virtuels et fichiers temporaires
-*.pyc
+# Exclure les fichiers de cache, logs et temporaires
 __pycache__/
+*.pyc
+*.pyo
 *.log
-*.tmp
-venv/
-# Ignorer le Dockerfile dans traducteur-audio (celui que vous ne voulez pas suivre)
-traducteur-audio/Dockerfile
 
-# Ignorer le dossier de clone bare (s'il existe)
-traducteur-universel.git/
+# Exclure les dossiers d'IDE et fichiers système
+.vscode/
+.idea/
+.DS_Store

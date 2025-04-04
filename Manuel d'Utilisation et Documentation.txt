@@ -1,0 +1,586 @@
+Manuel d'Utilisation et Documentation du Back-End - UoTranslate
+================================================================
+
+1. Introduction
+---------------
+Le back-end de "UoTranslate" est développé avec FastAPI et est organisé de manière modulaire.
+Il gère les fonctionnalités suivantes :
+- Authentification des utilisateurs (inscription et connexion) avec des tokens JWT.
+- Gestion des cours (liste, création, mise à jour, suppression).
+- Traitement en temps réel du flux audio : 
+  - Transcription audio via Vosk.
+  - Restauration de ponctuation via deepmultilingualpunctuation.
+  - Traduction via MarianMT.
+  - Synthèse vocale (TTS) via Silero TTS, diffusée via WebSocket.
+- Traduction de fichiers (PDF, DOCX, PPTX, WAV) avec extraction de texte et/ou transcription audio, puis traduction via une API externe.
+
+La base de données pour la gestion des utilisateurs est Firestore, accessible via un compte de service.
+
+2. Structure du Projet
+-----------------------
+L'arborescence du projet est la suivante :
+
+traducteur-universel/
+│
+├── .env                           # Variables d'environnement (clé secrète, port, credentials Firestore, etc.)
+├── firebase-credentials.json      # Fichier de credentials du compte de service Firestore
+├── requirements.txt               # Liste des dépendances Python
+├── public/                        # Front-end (HTML, CSS, JS, images)
+├── src/                           # (Facultatif, pour d'autres fichiers sources)
+└── traducteur-audio/              # Back-end FastAPI
+    ├── app.py                     # Point d'entrée de l'application FastAPI
+    ├── tradapp.py                 # Module autonome pour la traduction de fichiers (optionnel)
+    ├── core/
+    │   ├── __init__.py            # (Peut être vide ou contenir des imports communs)
+    │   ├── config.py              # Chargement du .env et configuration (clé secrète, port, credentials, etc.)
+    │   └── security.py            # Fonctions de sécurité, notamment la création de tokens JWT
+    ├── models/
+    │   ├── __init__.py            # (Peut être vide)
+    │   ├── user.py                # Définition du modèle utilisateur avec Pydantic
+    │   ├── firestore_db.py        # Module d'accès à Firestore (création, récupération, mise à jour d’utilisateurs)
+    │   └── vosk_model.py          # Chargement et initialisation du modèle Vosk pour la transcription
+    ├── routers/
+    │   ├── __init__.py            # (Peut être vide)
+    │   ├── auth_router.py         # Endpoints d'authentification (inscription et connexion)
+    │   ├── courses_router.py      # Endpoints de gestion des cours (liste, création, mise à jour, suppression)
+    │   ├── realtime_router.py     # Endpoints pour la traduction en temps réel et TTS via WebSocket
+    │   └── file_router.py         # Endpoints pour l'upload et la traduction de fichiers
+    └── utils/
+        ├── __init__.py            # (Peut être vide)
+        ├── transcription.py       # Fonctions utilitaires pour la transcription audio (Vosk)
+        ├── translation.py         # Fonctions utilitaires pour la traduction (MarianMT, post-traitement)
+        └── tts.py                 # Fonctions pour la synthèse vocale (Silero TTS)
+
+Pourquoi cette organisation ?
+-------------------------------
+- **Modularité** : Chaque fonctionnalité est isolée dans un module dédié pour faciliter la maintenance et l'évolution.
+- **Réutilisabilité** : Les fonctions utilitaires sont centralisées pour être réutilisées dans plusieurs modules.
+- **Séparation des responsabilités** : La configuration, la sécurité, les modèles et les routes sont clairement séparés.
+
+3. Détail des Fichiers et Fonctionnalités
+-----------------------------------------
+
+A. Core
+-------
+1. config.py :
+   - Charge le fichier .env et définit les paramètres essentiels tels que SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, PORT, OPENAI_API_KEY, et GOOGLE_APPLICATION_CREDENTIALS.
+2. security.py :
+   - Contient la fonction create_access_token qui génère un token JWT pour l'authentification.
+
+B. Models
+---------
+1. user.py :
+   - Définit le modèle utilisateur avec les champs id, name et email.
+2. firestore_db.py :
+   - Fournit des fonctions pour se connecter à Firestore et pour créer, récupérer et mettre à jour les documents dans la collection "users".
+3. vosk_model.py :
+   - Charge le modèle Vosk pour la transcription audio. Le chemin est relatif à "traducteur-audio" (exemple : "models/vosk-model-small-en-us-0.15").
+
+C. Routers
+----------
+1. auth_router.py :
+   - Endpoints :
+     - POST /api/auth/register : Inscrit un nouvel utilisateur (vérifie si l'utilisateur existe déjà, hache le mot de passe et enregistre dans Firestore).
+     - POST /api/auth/login : Vérifie les identifiants et renvoie un token JWT si valides.
+2. courses_router.py :
+   - Endpoints pour gérer les cours avec une base de données en mémoire.
+     - GET /api/courses/ : Liste les cours.
+     - POST /api/courses/ : Crée un nouveau cours.
+     - PATCH /api/courses/{course_id} : Met à jour un cours.
+     - DELETE /api/courses/{course_id} : Supprime un cours.
+3. realtime_router.py :
+   - Gère le traitement en temps réel : 
+     - Transcription via Vosk, restauration de ponctuation, traduction via MarianMT et simulation de TTS.
+     - Communication via WebSocket à l'URL ws://localhost:8081/api/realtime/ws.
+4. file_router.py :
+   - Permet l'upload d'un fichier (PDF, DOCX, PPTX, WAV) et renvoie une traduction ou transcription.
+   - Utilise des bibliothèques comme pdfplumber, python-pptx, python-docx et librosa.
+
+D. Utils
+--------
+1. transcription.py :
+   - Fonctions pour initialiser le modèle Vosk et pour transcrire un flux audio.
+2. translation.py :
+   - Fonctions pour la traduction avec MarianMT et le post-traitement (mise en majuscule après un point).
+3. tts.py :
+   - Fonctions pour la synthèse vocale avec Silero TTS, qui génère l'audio et le joue via sounddevice.
+
+4. Tests Réalisés et Commandes Curl
+------------------------------------
+
+A. Tests d'Authentification
+---------------------------
+- **Inscription (POST /api/auth/register) :**
+  Commande curl :
+  curl -X POST http://localhost:8081/api/auth/register -H "Content-Type: application/json" -d "{\"name\":\"Bineta Ly\",\"email\":\"bly058@uottawa.ca\",\"password\":\"Watiboui4ever\"}"
+  Résultat attendu :
+  {
+    "message": "User registered successfully",
+    "user": {
+      "name": "Bineta Ly",
+      "email": "bly058@uottawa.ca"
+    }
+  }
+  Vérification : Le document utilisateur est présent dans Firestore.
+
+- **Connexion (POST /api/auth/login) :**
+  Commande curl :
+  curl -X POST http://localhost:8081/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"bly058@uottawa.ca\",\"password\":\"Watiboui4ever\"}"
+  Résultat attendu : Un JSON contenant un token JWT et les informations utilisateur.
+
+B. Tests de Gestion des Cours (courses_router)
+-----------------------------------------------
+- **Lister les cours (GET /api/courses/) :**
+  Commande curl :
+  curl http://localhost:8081/api/courses/
+  Résultat attendu :
+  [{"id":1,"name":"Cours de Traduction"},{"id":2,"name":"Cours Avancé"}]
+
+- **Créer un cours (POST /api/courses/) :**
+  Commande curl :
+  curl -X POST http://localhost:8081/api/courses/ -H "Content-Type: application/json" -d "{\"name\":\"Nouveau cours\"}"
+  Résultat attendu : Un JSON du nouveau cours, par exemple {"id":3,"name":"Nouveau cours"}.
+
+- **Mettre à jour un cours (PATCH /api/courses/3) :**
+  Commande curl :
+  curl -X PATCH http://localhost:8081/api/courses/3 -H "Content-Type: application/json" -d "{\"name\":\"Cours modifié\"}"
+  Résultat attendu : {"id":3,"name":"Cours modifié"}.
+
+- **Supprimer un cours (DELETE /api/courses/3) :**
+  Commande curl :
+  curl -X DELETE http://localhost:8081/api/courses/3
+  Résultat attendu : {"message":"Course 3 deleted."}.
+
+C. Tests du Module Temps Réel et TTS (realtime_router)
+--------------------------------------------------------
+- **Connexion WebSocket :**
+  - Utilisez un outil comme WebSocket King Client (https://websocketking.com) pour vous connecter à :
+    ws://localhost:8081/api/realtime/ws
+  - Observations attendues : La connexion s'établit, et la console du serveur affiche des logs "Partial:", "Translated:" et "TTS speaking:" lors du traitement audio.
+
+D. Tests du Module de Traduction de Fichiers (file_router)
+-----------------------------------------------------------
+- **Upload d'un fichier :**
+  Commande curl (exemple pour un PDF) :
+  curl -X POST http://localhost:8081/api/translateFile -F "file=@C:\chemin\vers\fichier.pdf"
+  Résultat attendu : Un JSON contenant "translatedText" avec le texte extrait et traduit.
+
+E. Tests d'Intégration Front-End / Back-End
+--------------------------------------------
+- **Appels REST depuis le Front-End :**
+  Vérifiez que les fonctions fetch dans votre code JavaScript contactent correctement les endpoints (authentification, cours, upload).
+- **Connexion WebSocket depuis le Front-End :**
+  Assurez-vous que l'URL WebSocket (ws://localhost:8081/api/realtime/ws) est utilisée et que les messages de traduction s'affichent dans la zone prévue (par exemple, un élément avec l'id "translatedText").
+
+5. Conclusion
+-------------
+Chaque module du back-end a été testé de manière isolée :
+- **Authentification** : inscription et connexion fonctionnent, et les données sont enregistrées dans Firestore.
+- **Gestion des cours** : les endpoints GET, POST, PATCH et DELETE fonctionnent correctement.
+- **Traduction en temps réel** : le traitement audio, la traduction et le TTS (simulé) s'exécutent et diffusent les messages via WebSocket.
+- **Traduction de fichiers** : l'upload de fichiers et la traduction/transcription fonctionnent correctement.
+
+Ce manuel documente l'architecture, le code et les tests effectués pour le back-end. Il vous servira à la fois de guide d'utilisation et de livrable final pour cette partie de votre projet. 
+
+---
+Manuel d'Intégration du Front-End avec le Back-End – UoTranslate
+==================================================================
+
+1. Introduction
+---------------
+L’objectif de cette intégration est de connecter l’interface utilisateur (front-end) à l’API FastAPI (back-end) de UoTranslate. Le front-end, construit avec HTML, CSS et JavaScript, interagit avec le back-end via :
+  - Des appels REST (pour l’authentification, la gestion des cours, l’upload de fichiers, etc.)
+  - Une connexion WebSocket (pour la traduction en temps réel et la notification de synthèse vocale)
+
+2. Structure du Front-End
+--------------------------
+Le dossier « public » est organisé comme suit :
+  • public/css/style.css      – Feuille de style globale
+  • public/html/              – Fichiers HTML (index, login, register, profile, course, terms, policy, error)
+  • public/js/script.js       – Code JavaScript principal pour les interactions
+
+Les fichiers HTML utilisent Jinja2 (via Flask ou FastAPI avec templates) pour générer dynamiquement les liens (ex. avec {{ url_for(...) }}).
+
+3. Points d'Intégration
+-----------------------
+A. Appels REST (Authentification, Gestion des cours, Upload de fichiers)
+   - Les formulaires (login, register) et les actions de gestion des cours (création, modification, suppression) envoient des requêtes HTTP via fetch.
+   - Par exemple, la fonction de connexion en JavaScript envoie une requête POST à `http://localhost:8081/api/auth/login` et stocke le token JWT reçu dans le localStorage.
+
+B. Connexion WebSocket (Traduction en temps réel)
+   - Dans le fichier `script.js`, une connexion WebSocket est établie à l’URL :
+       ws://localhost:8081/api/realtime/ws
+   - Dès que le back-end envoie une traduction (issue du traitement audio et traduction), le message est affiché dans l’élément identifié par « translatedText ».
+   - Le client n’affiche pas les messages TTS (simulés en back-end) ; il affiche uniquement le texte traduit.
+
+C. Upload de fichiers
+   - Dans la page « course.html », l’utilisateur peut glisser-déposer ou sélectionner des fichiers.
+   - Le fichier est envoyé via une requête multipart/form-data à l’endpoint `/api/translateFile`.
+   - Le résultat (texte traduit ou transcription) est affiché dans la zone dédiée.
+
+4. Mise en Œuvre Technique (Exemples de Code)
+----------------------------------------------
+Exemple de connexion WebSocket (dans public/js/script.js) :
+
+-----------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+  const translationOutput = document.getElementById('translatedText');
+  const ws = new WebSocket('ws://localhost:8081/api/realtime/ws');
+
+  ws.onopen = () => {
+    console.log('Connexion WebSocket établie');
+  };
+
+  ws.onmessage = (event) => {
+    console.log('Message reçu via WebSocket:', event.data);
+    // Afficher la traduction finale dans l'interface
+    translationOutput.textContent = event.data;
+  };
+
+  ws.onerror = (error) => {
+    console.error('Erreur WebSocket:', error);
+  };
+
+  ws.onclose = () => {
+    console.log('Connexion WebSocket fermée');
+  };
+});
+-----------------------------------------------------------
+
+Exemple de fonction fetch pour la connexion utilisateur :
+
+-----------------------------------------------------------
+async function loginUser(email, password) {
+  try {
+    const response = await fetch('http://localhost:8081/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      console.log('Connexion réussie', data);
+      // Rediriger vers la page de profil par exemple
+      window.location.href = '/html/profile.html';
+    } else {
+      console.error('Erreur de connexion:', data.detail);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la connexion:', error);
+  }
+}
+-----------------------------------------------------------
+
+Exemple de gestion de l’upload de fichiers :
+
+-----------------------------------------------------------
+async function handleFileUpload(event) {
+  const files = event.target.files;
+  const formData = new FormData();
+  formData.append('file', files[0]);
+  
+  try {
+    const response = await fetch('http://localhost:8081/api/translateFile', {
+      method: 'POST',
+      body: formData
+    });
+    const result = await response.json();
+    console.log('Traduction du fichier:', result.translatedText);
+    // Afficher le résultat dans l'interface
+    document.getElementById('translatedText').textContent = result.translatedText;
+  } catch (error) {
+    console.error('Erreur lors de la traduction du fichier:', error);
+  }
+}
+-----------------------------------------------------------
+
+5. Tests d’Intégration Front-End / Back-End
+---------------------------------------------
+Avant de déployer, procédez aux tests suivants :
+
+A. Testez les appels REST avec fetch :
+   - Ouvrez la page de connexion (index.html ou login.html) et connectez-vous.
+   - Vérifiez dans la console du navigateur que le token est récupéré et stocké.
+   - Vérifiez les appels pour la gestion des cours en consultant la liste des cours sur la page concernée.
+
+B. Testez la connexion WebSocket :
+   - Ouvrez la page contenant la zone de traduction (profile.html).
+   - Vérifiez que la connexion se fait (console du navigateur) et que les traductions en temps réel s'affichent dans l'élément identifié (id="translatedText").
+
+C. Testez l’upload de fichiers :
+   - Ouvrez la page course.html et utilisez le formulaire d’upload.
+   - Vérifiez que le fichier est envoyé à l’endpoint `/api/translateFile` et que le texte traduit est affiché.
+
+D. Vérifiez l’aspect visuel et les animations :
+   - Confirmez que les effets CSS (transitions, animations, responsive design) fonctionnent sur différents appareils ou tailles d’écran.
+
+6. Remarques pour le Déploiement
+-------------------------------
+Avant le déploiement sur un environnement de production (par exemple, Cloud Run), vérifiez :
+   - Que toutes les URLs dans le code JavaScript (REST et WebSocket) sont mises à jour selon l’URL publique de votre back-end.
+   - Que les variables d’environnement (dans .env) sont correctement configurées sur l’environnement de déploiement.
+   - Que la communication entre front-end et back-end se fait sans problèmes (aucune erreur dans la console du navigateur ou dans les logs du serveur).
+
+7. Conclusion
+-------------
+Ce manuel d’intégration décrit l’architecture du front-end, les points d’intégration avec le back-end, les exemples de code pour la connexion WebSocket, les appels REST et la gestion d’uploads, ainsi que les étapes de tests pour valider l’ensemble. Une fois ces tests effectués et validés, l’intégration complète front-end/back-end est prête pour le déploiement.
+
+Voici un diagramme :
+                          +-------------------------+
+                          |     Navigateur Client   |
+                          |  (HTML, CSS, JS Frontend)|
+                          +-----------+-------------+
+                                      │
+                                      │ Appels REST (HTTP)
+                                      │ et Connexion WebSocket
+                                      ▼
+                   +---------------------------------------+
+                   |              Back-End               |
+                   |           (FastAPI Server)          |
+                   |                                       |
+                   |  ┌─────────Routers───────────┐        |
+                   |  |  auth_router             |        |
+                   |  |  courses_router          |        |
+                   |  |  realtime_router         |        |
+                   |  |  file_router             |        |
+                   |  └──────────────────────────┘        |
+                   |                                       |
+                   |  ┌─────────Core─────────────┐          |
+                   |  | config.py               |          |
+                   |  | security.py             |          |
+                   |  └─────────────────────────┘          |
+                   |                                       |
+                   |  ┌─────────Models──────────┐           |
+                   |  | user.py, firestore_db.py|           |
+                   |  | vosk_model.py           |           |
+                   |  └─────────────────────────┘           |
+                   |                                       |
+                   |  ┌─────────Utils───────────┐           |
+                   |  | transcription.py        |           |
+                   |  | translation.py          |           |
+                   |  | tts.py                  |           |
+                   |  └─────────────────────────┘           |
+                   +----------------+------------------------+
+                                    │
+                                    │ Communication interne
+                                    │ (extraction audio, traduction, TTS)
+                                    ▼
+                   +-------------------------------+
+                   |      Firestore (BDD)          |
+                   |  (Stockage des utilisateurs,  |
+                   |   éventuellement des cours)   |
+                   +-------------------------------+
+Manuel d’Utilisateur – Traducteur Universel
+============================================
+
+1. Introduction
+---------------
+Le Traducteur Universel est une application web destinée aux étudiants de l’Université d’Ottawa. Elle offre deux grands services :
+ • Traduction en temps réel via la transcription audio (microphone) et WebSocket.
+ • Traduction de documents (PDF, PPTX, DOCX, WAV) via upload.
+
+L’application est composée d’un back-end FastAPI (situé dans le dossier “traducteur-audio”) et d’un front-end (dans “public”). La communication entre les deux se fait via des endpoints REST et WebSocket.
+
+2. Architecture du Projet
+-------------------------
+Arborescence du projet :
+
+traducteur-universel/
+│
+├── .env                           # Variables d'environnement (clé secrète, port, credentials Firestore, etc.)
+├── firebase-credentials.json      # Credentials du compte de service Firestore
+├── requirements.txt               # Dépendances Python
+├── public/                        # Front-end
+│   ├── html/                      # Pages HTML (index.html, login.html, register.html, profile.html, course.html, app.html, terms.html, policy.html, error.html)
+│   ├── css/                       # Feuilles de style (style.css)
+│   └── js/                        # Scripts JavaScript (script.js)
+└── traducteur-audio/              # Back-end FastAPI
+    ├── app.py                     # Point d'entrée (définit les routes de pages et inclut les routeurs API)
+    ├── core/
+    │   ├── config.py              # Chargement du .env et configuration
+    │   └── security.py            # Fonctions de sécurité (ex. création de tokens JWT)
+    ├── models/
+    │   ├── user.py                # Définition du modèle utilisateur (Pydantic)
+    │   ├── firestore_db.py        # Fonctions d’accès à Firestore (création, récupération, mise à jour des utilisateurs)
+    │   └── vosk_model.py          # Chargement du modèle Vosk pour la transcription
+    ├── routers/
+    │   ├── auth_router.py         # Endpoints d’authentification (inscription, connexion)
+    │   ├── courses_router.py      # Endpoints de gestion des cours (liste, création, modification, suppression)
+    │   ├── realtime_router.py     # Endpoints WebSocket pour traduction en temps réel (transcription avec Vosk, traduction via MarianMT, ponctuation avec DeepMultilingualPunctuation)
+    │   └── file_router.py         # Endpoint pour l’upload et la traduction de documents
+    └── utils/
+        ├── transcription.py       # Fonctions pour la transcription audio (Vosk)
+        ├── translation.py         # Fonctions pour la traduction (MarianMT)
+        └── tts.py                 # Fonctions de synthèse vocale (ex. Silero TTS)
+
+3. Fonctionnalités Principales
+-------------------------------
+– Inscription / Connexion
+  • Inscription via l’endpoint POST /api/auth/register.
+  • Connexion via POST /api/auth/login (renvoie un token JWT).
+
+– Gestion des cours
+  • Liste des cours : GET /api/courses
+  • Création d’un cours : POST /api/courses
+  • Modification d’un cours : PATCH /api/courses/{course_id}
+  • Suppression d’un cours : DELETE /api/courses/{course_id}
+
+– Traduction en Temps Réel
+  • Le bouton « Enregistrer » (microphone) démarre l’enregistrement audio, envoie les données au back-end qui effectue :
+    – La transcription via Vosk.
+    – La ponctuation avec DeepMultilingualPunctuation.
+    – La traduction via le modèle MarianMT (Helsinki-NLP/opus-mt-en-fr).
+  • Le résultat est renvoyé via WebSocket et affiché sur la page.
+
+– Traduction de Documents
+  • Upload de fichiers (PDF, PPTX, DOCX, WAV) via POST /api/translateFile.
+  • Extraction de texte et/ou transcription, puis traduction (via une API externe ou fonction interne).
+
+4. Modèles Utilisés
+-------------------
+– **Vosk** : Pour la transcription audio en temps réel.
+– **MarianMT** : Pour la traduction de l’anglais vers le français (modèle "Helsinki-NLP/opus-mt-en-fr").
+– **DeepMultilingualPunctuation** : Pour la restauration de la ponctuation dans le texte transcrit.
+– **(Optionnel) Silero TTS** : Pour la synthèse vocale (la lecture audio de la traduction).
+
+5. Instructions d’Installation et de Lancement
+------------------------------------------------
+a) Back-end
+   1. Créez un environnement virtuel et installez les dépendances :
+      pip install -r requirements.txt
+   2. Configurez le fichier .env avec vos paramètres (clé secrète, port, Firestore, etc.).
+   3. Lancez le back-end depuis le dossier “traducteur-audio” :
+      python app.py
+
+b) Front-end
+   – Les fichiers HTML, CSS et JS se trouvent dans “public”. Le back-end les sert via la route /static.
+
+6. Tests API (requêtes en une seule ligne)
+-------------------------------------------
+– Inscription :
+  curl -X POST http://localhost:8081/api/auth/register -H "Content-Type: application/json" -d "{\"name\":\"Bineta Ly\",\"email\":\"bly058@uottawa.ca\",\"password\":\"Watib4ever\"}"
+
+– Connexion :
+  curl -X POST http://localhost:8081/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"bly058@uottawa.ca\",\"password\":\"Watib4ever\"}"
+
+– Liste des cours :
+  curl -X GET http://localhost:8081/api/courses
+
+– Création d’un cours :
+  curl -X POST http://localhost:8081/api/courses -H "Content-Type: application/json" -d "{\"name\":\"Nouveau cours\"}"
+
+– Mise à jour d’un cours (exemple, id=3) :
+  curl -X PATCH http://localhost:8081/api/courses/3 -H "Content-Type: application/json" -d "{\"name\":\"Cours modifié\"}"
+
+– Suppression d’un cours (exemple, id=3) :
+  curl -X DELETE http://localhost:8081/api/courses/3
+
+– Upload et traduction de document (exemple pour un PDF) :
+  curl -X POST http://localhost:8081/api/translateFile -F "file=@/chemin/vers/fichier.pdf"
+
+– Test WebSocket pour traduction en temps réel :
+  Connectez-vous via un client WebSocket (ex. Extension « Simple WebSocket Client ») à :
+  ws://localhost:8081/api/realtime/ws
+
+7. Comportement de l’Interface Utilisateur
+-------------------------------------------
+– Lors de la connexion réussie, l’utilisateur est redirigé vers la page d’accueil (app.html).
+– Sur la page de profil, le bouton « Retour » renvoie à app.html.
+– Les actions sur les cours (modification, suppression, etc.) se font via un menu contextuel déclenché par un clic droit.
+– Le bouton “Enregistrer” (microphone) démarre l’enregistrement audio, envoie les données au back-end pour transcription et traduction, puis affiche le résultat sur l’interface.
+– L’upload de fichiers permet de traduire des documents et d’afficher la traduction dans la zone dédiée.
+
+8. Remarques et Dépannage
+-------------------------
+– Si un endpoint retourne une erreur 422, vérifiez que le JSON envoyé est bien formaté.
+– Pour les erreurs de redirection (307), assurez-vous que les URLs dans les requêtes correspondent aux routes définies.
+– Les messages d’erreur dans la console (par exemple, pour l’upload ou la transcription) doivent être vérifiés et corrigés en s’assurant que les dépendances sont à jour.
+– Pour le WebSocket, vérifiez que le client se connecte bien à ws://localhost:8081/api/realtime/ws.
+
+9. Modifications Apportées
+---------------------------
+Les principaux ajustements réalisés sont :
+ • Définition explicite des noms de routes dans app.py (via le paramètre name dans @app.get) pour que les appels via url_for soient résolus.
+ • Correction des routes d’authentification dans auth_router.py en ajoutant "name" aux endpoints pour éviter les erreurs de NoMatchFound.
+ • Ajout et vérification des fonctionnalités de création, mise à jour et suppression de cours dans courses_router.py.
+ • Implémentation d’un endpoint WebSocket dans realtime_router.py pour la traduction en temps réel.
+ • Un endpoint pour l’upload et la traduction de fichiers dans file_router.py.
+ • Utilisation de StaticFiles dans app.py pour servir le front-end depuis le dossier public.
+ • Correction des chemins relatifs dans les templates HTML via url_for.
+
+10. Conclusion
+--------------
+Ce manuel fournit toutes les informations nécessaires pour installer, tester et utiliser le Traducteur Universel. Il décrit en détail l’architecture, les fonctionnalités et les modèles intégrés pour la transcription et la traduction, ainsi que des exemples de requêtes API pour valider le fonctionnement complet du système.
+
+Fin du manuel.
+Manuel d'Utilisateur – UoTranslate
+
+1. Introduction
+---------------
+UoTranslate est une application web qui permet la traduction en temps réel ainsi que la traduction de documents. Elle utilise les modèles suivants :
+- **Transcription Audio** : Facebook/Wav2Vec2-large-960h (via Transformers) pour la transcription des fichiers audio.
+- **Traduction** : Helsinki-NLP/opus-mt-en-fr (via Transformers) pour la traduction du texte.
+- **Ponctuation** : DeepMultilingualPunctuation pour restaurer la ponctuation.
+- **Transcription en Temps Réel** : Vosk avec KaldiRecognizer.
+- **Synthèse Vocale (TTS)** : (Simulation dans le prototype, à intégrer avec Silero TTS ou autre).
+
+2. Fonctionnalités Principales
+------------------------------
+- Inscription et Connexion : Création et gestion des comptes utilisateurs.
+- Traduction en Temps Réel : Utilisation du microphone pour capter l’audio, le transcrire, le traduire et éventuellement le lire.
+- Traduction de Documents : Upload de documents (PDF, PPTX, DOCX, WAV) pour extraire, transcrire et traduire le contenu.
+- Gestion des Cours : Création, modification et suppression de cours, avec un menu contextuel pour renommer ou supprimer.
+
+3. Instructions d’Utilisation
+-----------------------------
+a. Inscription :
+   - Rendez-vous sur la page d'inscription.
+   - Remplissez le formulaire avec votre nom, email et mot de passe.
+   - Cliquez sur "Créer un compte". Une confirmation d'inscription sera affichée.
+
+b. Connexion :
+   - Rendez-vous sur la page de connexion.
+   - Entrez vos identifiants et cliquez sur "Se connecter".
+   - Après connexion, vous êtes redirigé vers la page principale (app.html).
+
+c. Création et Gestion des Cours :
+   - Dans la page principale (app.html), cliquez sur "Nouveau cours".
+   - Entrez le nom du cours et vous serez redirigé vers la page du cours.
+   - Dans la page du cours, faites un clic droit sur un cours pour afficher le menu contextuel (renommer, supprimer).
+
+d. Traduction en Temps Réel :
+   - Dans la page du cours, cliquez sur le bouton microphone pour démarrer l’enregistrement.
+   - Le système transcrit et traduit automatiquement l’audio.
+   - Le résultat apparaît dans la zone de traduction.
+
+e. Traduction de Documents :
+   - Dans la page du cours, utilisez le bouton "Parcourir les fichiers" pour uploader un document.
+   - Le document est envoyé au serveur pour extraire le texte, le transcrire si nécessaire et le traduire.
+   - La traduction est affichée dans la zone dédiée.
+
+4. Commandes de Test (CURL)
+---------------------------
+- Inscription :
+  curl -X POST http://localhost:8081/api/auth/register -H "Content-Type: application/json" -d "{\"name\":\"Bineta Ly\",\"email\":\"bly058@uottawa.ca\",\"password\":\"Watib4ever\"}"
+- Connexion :
+  curl -X POST http://localhost:8081/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"bly058@uottawa.ca\",\"password\":\"Watib4ever\"}"
+- Création d’un cours :
+  curl -X POST http://localhost:8081/api/courses -H "Content-Type: application/json" -d "{\"name\":\"Nouveau cours\"}"
+- Modification d’un cours :
+  curl -X PATCH http://localhost:8081/api/courses/3 -H "Content-Type: application/json" -d "{\"name\":\"Cours modifié\"}"
+- Suppression d’un cours :
+  curl -X DELETE http://localhost:8081/api/courses/3
+- Upload d’un document PDF :
+  curl -X POST http://localhost:8081/api/translateFile -F "file=@\"C:\Users\ASUS\Downloads\2025 Syllabus CHG2724.pdf\""
+
+5. Remarques Techniques
+-----------------------
+- Assurez-vous que l’accès aux fichiers statiques se fait via la route /static.
+- Pour l’upload de documents, vérifiez la syntaxe du chemin du fichier (surtout sous Windows).
+- Le microphone et la traduction en temps réel nécessitent que le navigateur autorise l’accès à l’audio.
+- Les erreurs 307 indiquent des redirections internes : vérifiez que les noms des routes sont correctement utilisés dans les templates via url_for.
+
+Fin du Manuel.
+
+

@@ -1,87 +1,60 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traduction en Temps Réel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil - Traduction Universelle</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Logo" 
-                 class="sidebar-logo">
-                 <button id="back-btn" data-url="{{ url_for('profile') | safe }}" class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                
-                <script>
-                    document.getElementById('back-btn').addEventListener('click', function() {
-                        var url = this.getAttribute('data-url');
-                        window.location.href = url;
-                    });
-                </script>
-                
-
-        <div class="sidebar-bar" onclick="addCourse();" 
-             data-tooltip="Nouveau cours">
-            <i class="fas fa-plus"></i>
-            <span>Nouveau cours</span>
-        </div>
-
-        <div class="search-group">
-            <input type="text" placeholder="Rechercher un cours">
-        </div>
-
-        <div class="course-container">
-            <div id="courses"></div>
-        </div>
+  <!-- Sidebar Gauche -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" class="sidebar-logo animated">
+      <button class="sidebar-bar" onclick="addCourse()">
+        <i class="fas fa-plus"></i>
+        <span>Nouveau cours</span>
+      </button>
+      <div class="search-group">
+        <input type="text" placeholder="Rechercher un cours" id="courseSearch">
+      </div>
     </div>
-
-    <div class="app-container">
-        <div class="transcription-window">
-            <div class="transcription-header">
-                <h3>Traduction en temps réel</h3>
-                <div class="language-tags">EN → FR</div>
-            </div>
-            <div id="transcriptionOutput" class="transcription-content">
-                Cliquez sur le micro pour commencer
-            </div>
-        </div>
+    <div class="course-container animated">
+      <div id="courses"></div>
     </div>
-
-    <div class="functional-buttons">
-        <button id="startStopBtn" title="Enregistrer">
-            <i class="fas fa-microphone fa-2x"></i>
-        </button>
-        <button id="saveBtn" title="Sauvegarder">
-            <i class="fas fa-save fa-2x"></i>
-        </button>
-        <button id="focusMode" title="Mode Focus">
-            <i class="fas fa-crosshairs fa-2x"></i>
-        </button>
-        <button id="fontSizeUp" title="Agrandir police">
-            <i class="fas fa-plus fa-2x"></i>
-        </button>
-        <button id="fontSizeDown" title="Réduire police">
-            <i class="fas fa-minus fa-2x"></i>
-        </button>
-        <button id="daltonianMode" title="Mode Daltonien">
-            <i class="fas fa-adjust fa-2x"></i>
-        </button>
+  </div>
+  <!-- Contenu Central Animé -->
+  <div class="app-container animated">
+    <div class="welcome-message">
+      <h1 class="reveal-text">Traduction Universelle</h1>
+      <p class="float-in">Sélectionnez ou créez un cours pour commencer</p>
     </div>
-
-    <footer>
-        <div class="footer-content">
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Logo" 
-                 class="footer-logo">
-            <p class="group-name">© 2025 C1-2 IA de Traduction Universelle</p>
-        </div>
-    </footer>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </div>
+  <!-- Boutons Fonctionnels -->
+  <div class="functional-buttons animated">
+    <button id="nightMode" title="Mode Nuit">
+      <i class="fas fa-moon fa-2x"></i>
+    </button>
+    <button id="focusMode" title="Mode Focus">
+      <i class="fas fa-crosshairs fa-2x"></i>
+    </button>
+    <button id="fontSizeUp" title="Agrandir police">
+      <i class="fas fa-plus fa-2x"></i>
+    </button>
+    <button id="fontSizeDown" title="Réduire police">
+      <i class="fas fa-minus fa-2x"></i>
+    </button>
+    <button id="daltonianMode" title="Mode Daltonien">
+      <i class="fas fa-adjust fa-2x"></i>
+    </button>
+  </div>
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" class="footer-logo animated">
+      <p class="group-name">© 2025 C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', path='js/script.js') }}"></script>
 </body>
 </html>

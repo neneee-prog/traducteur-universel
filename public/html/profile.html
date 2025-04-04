@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Profil</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="https://kit.fontawesome.com/a74756bd6e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Université d'Ottawa" 
-                 class="uottawa-logo">
-        </div>
-        <button id="back-btn" data-url="{{ url_for('app_page') | safe }}" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        
-        <script>
-            document.getElementById('back-btn').addEventListener('click', function() {
-                var url = this.getAttribute('data-url');
-                window.location.href = url;
-            });
-        </script>
-        
-
-    <div class="container">
-        <div class="card">
-            <h2>Mon Compte</h2>
-            
-            <div class="input-group">
-                <input type="text" id="name" placeholder="Nom" value="Étudiant" required>
-                <label for="name">Nom complet</label>
-            </div>
-            
-            <div class="input-group">
-                <input type="email" id="email" placeholder="Email" value="etudiant@uottawa.ca" required>
-                <label for="email">Email uOttawa</label>
-            </div>
-            
-            <button class="btn btn-primary">Sauvegarder</button>
-            <button class="btn btn-secondary">Changer mot de passe</button>
-        </div>
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Université d'Ottawa" class="uottawa-logo">
     </div>
+    <button id="back-btn" data-url="{{ url_for('app_page') }}" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <script>
+      document.getElementById('back-btn').addEventListener('click', function() {
+        window.location.href = this.dataset.url;
+      });
+    </script>
+  </header>
 
-    <footer>
-        <div class="footer-content">
-            <img src="{{ url_for('static', filename='images/logo-uottawa.svg') }}" 
-                 alt="Logo" 
-                 class="footer-logo">
-            <p>© 2025 Université d'Ottawa</p>
-            <p class="group-name">C1-2 IA de Traduction Universelle</p>
+  <div class="container">
+    <div class="card">
+      <h2>Mon Compte</h2>
+      <form id="updateProfileForm">
+        <div class="input-group">
+          <input type="text" id="name" name="name" placeholder="Nom" value="Étudiant" required>
+          <label for="name">Nom complet</label>
         </div>
-    </footer>
+        <div class="input-group">
+          <input type="email" id="email" name="email" placeholder="Email" value="etudiant@uottawa.ca" required>
+          <label for="email">Email uOttawa</label>
+        </div>
+        <button type="button" id="saveProfileBtn" class="btn btn-primary">Sauvegarder</button>
+      </form>
+      <button type="button" id="changePasswordBtn" class="btn btn-secondary">Changer mot de passe</button>
+    </div>
+  </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <footer>
+    <div class="footer-content">
+      <img src="{{ url_for('static', path='images/logo-uottawa.svg') }}" alt="Logo" class="footer-logo">
+      <p>© 2025 Université d'Ottawa</p>
+      <p class="group-name">C1-2 IA de Traduction Universelle</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      try {
+        const response = await fetch('http://localhost:8081/api/auth/update', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Profil mis à jour avec succès !');
+        } else {
+          alert('Erreur lors de la mise à jour du profil: ' + data.detail);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la requête de mise à jour:', error);
+        alert('Erreur lors de la mise à jour du profil.');
+      }
+    });
+  </script>
 </body>
 </html>
